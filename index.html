@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>發掘你的屬靈恩賜</title>
+    <style>
+        .hidden { display: none; }
+        .question-container { margin-top: 20px; }
+        .result-container { margin-top: 20px; }
+        .bar { text-align: center; color: white; margin: 5px 0; padding: 5px; }
+        .bar-container { display: flex; flex-direction: column; align-items: flex-start; margin-top: 10px; }
+        .bar-container > div { margin: 2px 0; display: flex; align-items: center; }
+        .question { }
+        .question.green { color: darkgreen; }
+        .question.blue { color: darkblue; }
+        .question.red { color: darkred; }
+        .question.purple { color: darkpurple; }
+    </style>
+</head>
+<body>
+    <div id="intro">
+        <p>請回答接下來的每個問題，根據你的生活實況，選擇可以描述你實際情況的答案。毋須仔細思考，按你的自然反應作答即可。</p>
+        <label for="name">姓名:</label>
+        <input type="text" id="name">
+        <button onclick="startQuiz()">開始測驗</button>
+    </div>
+
+    <div id="quiz" class="hidden">
+        <div class="question-container">
+            <p id="question" class="question"></p>
+            <div>
+                <input type="radio" id="option0" name="options" value="0">
+                <label for="option0">否定</label>
+            </div>
+            <div>
+                <input type="radio" id="option1" name="options" value="1">
+                <label for="option1">少許贊同</label>
+            </div>
+            <div>
+                <input type="radio" id="option2" name="options" value="2">
+                <label for="option2">大致贊同</label>
+            </div>
+            <div>
+                <input type="radio" id="option3" name="options" value="3">
+                <label for="option3">相當贊同</label>
+            </div>
+            <div>
+                <input type="radio" id="option4" name="options" value="4">
+                <label for="option4">非常贊同</label>
+            </div>
+        </div>
+        <button onclick="previousQuestion()">上一個問題</button>
+    </div>
+
+    <div id="result" class="hidden">
+        <h2>測試結果</h2>
+        <p id="result-name"></p>
+        <div class="bar-container" id="result-bars"></div>
+    </div>
+
+    <script>
+        const questions = [
+            "我喜歡在幕後處理細節瑣事。",
+            "當群體中沒有領導者的時候，我常會自告奮勇去擔負領導的工作。",
+            "處身於群體中，我總主動去接觸那些孤單的人。",
+            "我有能力找出需要，也會完成它相應的工作，無論這工作是如何的微不足道。",
+            "我能夠把意見、人和事組織起來，以達至某訂定的目標。",
+            "人們常說我有良好的屬靈分析能力。",
+            "我極相信自己能作大事以榮耀神的名字。",
+            "我曾被邀請在教會活動中歌唱或奏樂。",
+            "神曾因應我的禱告成就不可能發生的事情。",
+            "我能靠雙手創作，能設計及製作物品。",
+            "因我的禱告，神曾讓我在沒可能的情況下得到超自然的果效。",
+            "我樂意以錢財供應有急切需要的人。",
+            "我樂意安慰身在醫院、監獄或老人院的人們。",
+            "我經常能洞察問題的所在並提供適切的解決方法。",
+            "我曾洞悉教會所面對的困難 ;而且人們毫無頭緒時，我已有解決的辦法。",
+            "我喜歡鼓勵、慰解沮喪的人。",
+            "我能夠詳盡深入地查考某段經文，然後與別人分享該經文的意思。",
+            "我正在帶領著一個(或一個以上 ) 年青基督徒在他的屬靈路上成長。",
+            "我得到別人的尊敬，認為我在屬靈的事上有著權柄。",
+            "我有學習外語的能力。",
+            "神常向我啟迪祂對教會未來動向的旨意。",
+            "我喜歡與非基督徒相處，特別希望藉此與他們分享主耶穌的訊息。",
+            "每當我從新聞或談話中知道某些特別的需要時，我都有代禱的感動。",
+            "我願意協助牧教會領袖，以致他們更有時間去處理優先的或更重要的事工。",
+            "我不怕要求別人為教會完成一項重要的 事工。",
+            "我喜歡招待客人，讓他們覺得賓至如歸 。",
+            "我喜歡服事別人，不管所作的事是如何微不足道。",
+            "我具極強的組織能力，常常訂定目標及製定方案去完成它。",
+            "我擅於分辦別人的品格，且能找出屬靈上的錯謬。",
+            "我常敢開拓一些別人不敢嘗試的計劃，而且經常獲致成功。",
+            "我相信 我是一個好的詩班員。",
+            "神曾使用我作出一些人類能力範圍內不能達致的事情。",
+            "我喜歡做一些例如木工、編織、縫紉、五金、彩色玻璃等的工作。",
+            "我喜歡為 一些身體或情緒上有病患的禱告，祈求神醫治他們。",
+            "我喜樂地奉獻遠超過我收入的十分之一。",
+            "我同情受傷害或孤單的人，並願意花時間陪伴他們，使他們開心。",
+            "神曾經在某重要的事情上，帶領我在數個複雜的選擇中作出正確的決定，那時候，沒有人知道應該怎樣做。",
+            "我喜歡研究有關神話語中的疑難問題，並能比他人更快捷及更容易地找到答案。",
+            "人們經常向我傾訴他們的困難，我亦會鼓勵他們。",
+            "當遇上難解經文時，我往往有強烈興趣要去探究答案。",
+            "我願意犧牲自己的空閒時間去幫助有需要的人。",
+            "我願意並雀躍地去開拓一間新的教會。",
+            "我容易地適應外地的文化、語言及生活習慣。因著我的適應力，我願意在別的國家事奉。",
+            "我經常為基督教的要義發言，儘管我說的話並不為眾人所歡迎，一些人更認為我思 想狹窄或頑固。",
+            "我很容易帶領人接受基督。",
+            "我認為一個基督徒最重要的事就是禱告。",
+            "我願意替代別人的常務工作，好讓他們能完成他們的特定任務。",
+            "我能夠組織及帶領一個群體去達成一個特定的目標。",
+            "我喜歡結識新來的朋友及介紹他們認識群體裡其他的人。",
+            "我經常於限定的時間內把事情做好，並不大需要別人的稱讚及感謝。",
+            "我可以輕鬆地把重要的責任授權以他人。",
+            "在複雜的屬靈問題上，他人尚在迷惘中，我卻能分辦其中的對錯。",
+            "雖然外在環境惡劣，因著神的信實，我深信我的未來是一片光明。",
+            "我喜愛唱歌，人們亦說我有一副好嗓子。",
+            "神曾因著我的禱告，讓我在不可能的境況下得著超自然的果效。",
+            "我在供應別人的需要中得著喜樂。",
+            "曾有人因我的禱告而得醫治。",
+            "我不介意降低自己的生活條件，以至能更多的供應教會及有需要的人。",
+            "就算要作出一些犧牲，我也願意盡我的能力幫助身邊有需要的人。",
+            "當人們不知道該怎樣做的時候，他們通常會來徵詢我的意見。",
+            "我能夠從眾多渠道尋找資訊，以得出對問題的答案，或在某課題上得到更多的學 習。",
+            "我有催逼感要自己挑戰 (但非譴責)別人，著他們特別在靈命方面有所增長。",
+            "人們喜愛聆聽我的聖經教導。",
+            "我喜歡與人同工，並希望協助他人成為為主作工的最佳的人選。",
+            "別處很多地方的人也接受我的屬靈權柄。",
+            "我願意在與自己文化及生活方式不同的國家，以外語傳講福音。",
+            "我覺得必要傳講聖經的訊息，使人們明白神對他們的期望。",
+            "我喜歡告訴別人如何能成為基督徒，以及邀請他們接受基督。",
+            "神應允了眾多我為別人的代求。",
+            "我樂意幫助別人完成工作，並不需要公開的表彰。",
+            "人們敬重我的意見並跟隨我的方向。",
+            "我樂意開放自己的家與教會的新朋友或訪客交往。",
+            "我喜爱幫助有需要的人;當滿足他們的需要時 ，我感到滿足。",
+            "那怕在壓力下，我也可輕鬆地作出重要的決定。",
+            "人們常來向我請教如何判斷屬靈上的真理與錯謬。",
+            "我常透過禱告向神表達信心，神亦以令人振奮的方式回應我的禱告。",
+            "我相信神會透過在詩班的事奉，叫我以歌曲傳遞衪的訊息。",
+            "神透過使用我作出神蹟以榮耀祂的國。",
+            "人們說我有手藝的天份。",
+            "人們常找我為他們身體的醫治代禱。",
+            "我常用不具名的方式，以金錢幫助別人，從不期望任何的回報。",
+            "當我知道別人因沒有 工作而不能應付生活所需的時候 ，我總會盡力幫助他們。",
+            "神使我能把聖經 真理應用於實際的境況 上。",
+            "我能自學探討深奧的聖經真理和原則，我也享受這過程。",
+            "人們說我容易相處，他們會把他們的秘密告訴我。",
+            "我能組織我的思考，並且能有條理地把準備好的聖經課題在人們前表達出來。",
+            "我幫助偏離神的基督徒們與神重新建立良好的關係。",
+            "在缺乏教會的地方傳福音以至建立新的基督徒群體是 一件令我興奮的事。",
+            "我沒有種族歧視，我真誠地欣賞與我極不相同的人。",
+            "我覺得我沒有困難把聖經的應許運用於現今的境況中。",
+            "我強烈希望幫助非基督徒得著主耶穌的救恩。",
+            "我最喜愛的教會事工是禱告，為此我把大量的時間握上。",
+        ];
+
+        const giftNames = [
+            "幫助人", "領導", "款待", "服事", "行政", "屬靈洞察力", "信心", "音樂", "神蹟", "手藝", "醫治",
+            "奉獻", "憐憫", "智慧", "知識", "勸勉", "教導", "牧養", "使徒", "宣教", "作先知講道", "傳福音", "禱告"
+        ];
+
+        const colors = [
+            "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF", "#FF8C33", "#33FFC7", "#FF5733", "#33D4FF", "#FF33A8",
+            "#A833FF", "#FF8C33", "#33FFC7", "#33FF57", "#3357FF", "#FF5733", "#33FF57", "#3357FF", "#FF33A8", "#A833FF",
+            "#FF8C33", "#33FFC7", "#33D4FF"
+        ];
+
+        const scores = Array(23).fill(0);
+        let currentQuestion = 0;
+        let answers = Array(questions.length).fill(null);
+
+        function startQuiz() {
+            const name = document.getElementById('name').value;
+            if (name.trim() === "") {
+                alert("請輸入姓名");
+                return;
+            }
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('quiz').classList.remove('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const questionElement = document.getElementById('question');
+            questionElement.textContent = questions[currentQuestion];
+            questionElement.className = `question ${getQuestionColor(currentQuestion)}`;
+
+            const selectedValue = answers[currentQuestion];
+            document.querySelectorAll('input[name="options"]').forEach(input => {
+                input.checked = input.value == selectedValue;
+                input.onclick = nextQuestion;
+            });
+        }
+
+        function getQuestionColor(index) {
+            const colors = ['green', 'blue', 'red', 'purple'];
+            return colors[index % 4];
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            saveAnswer();
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                calculateResults();
+            }
+        }
+
+        function saveAnswer() {
+            const selectedValue = document.querySelector('input[name="options"]:checked').value;
+            answers[currentQuestion] = parseInt(selectedValue, 10);
+        }
+
+        function calculateResults() {
+            answers.forEach((answer, index) => {
+                const giftIndex = (index % 23);
+                scores[giftIndex] += answer;
+            });
+            showResults();
+        }
+
+        function showResults() {
+            document.getElementById('quiz').classList.add('hidden');
+            const name = document.getElementById('name').value;
+            document.getElementById('result-name').textContent = `測試者姓名: ${name}`;
+            
+            const resultBars = document.getElementById('result-bars');
+            resultBars.innerHTML = '';
+
+            const results = scores.map((score, index) => ({ gift: giftNames[index], score, color: colors[index] }));
+            results.sort((a, b) => b.score - a.score);
+
+            results.forEach(result => {
+                if (result.score > 0) {
+                    const barContainer = document.createElement('div');
+                    const bar = document.createElement('div');
+                    bar.style.width = `${result.score * 10}px`;
+                    bar.style.backgroundColor = result.color;
+                    bar.className = 'bar';
+                    bar.textContent = result.score;
+
+                    const label = document.createElement('span');
+                    label.textContent = result.gift;
+                    label.style.marginLeft = "10px";
+
+                    barContainer.appendChild(bar);
+                    barContainer.appendChild(label);
+
+                    resultBars.appendChild(barContainer);
+                }
+            });
+
+            document.getElementById('result').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
