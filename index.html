@@ -3,18 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>發掘你的屬靈恩賜</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         .hidden { display: none; }
-        .question-container { margin-top: 20px; }
-        .result-container { margin-top: 20px; }
-        .bar { text-align: center; color: white; margin: 5px 0; padding: 5px; }
-        .bar-container { display: flex; flex-direction: column; align-items: flex-start; margin-top: 10px; }
-        .bar-container > div { margin: 2px 0; display: flex; align-items: center; }
-        .question { }
+        .question-container, .result-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .result-container {
+            align-items: flex-start;
+        }
+        .question-container label, .question-container input[type="radio"] {
+            margin-right: 10px;
+        }
+        .bar {
+            text-align: center;
+            color: white;
+            margin: 5px 0;
+            padding: 5px;
+        }
+        .bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 10px;
+        }
+        .bar-container > div {
+            margin: 2px 0;
+            display: flex;
+            align-items: center;
+        }
+        p, label {
+            font-size: 1.2em;
+        }
+        input[type="text"] {
+            font-size: 1.2em;
+            padding: 5px;
+            margin: 10px 0;
+            width: calc(100% - 22px);
+        }
+        button {
+            font-size: 1.2em;
+            padding: 10px 20px;
+        }
+        .question {
+            font-size: 1.4em;
+            text-align: center;
+        }
         .question.green { color: darkgreen; }
         .question.blue { color: darkblue; }
         .question.red { color: darkred; }
         .question.purple { color: darkpurple; }
+        @media (max-width: 600px) {
+            .question-container, .result-container {
+                width: 100%;
+            }
+            .question {
+                font-size: 1.2em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -154,6 +213,7 @@
             "我最喜愛的教會事工是禱告，為此我把大量的時間握上。",
         ];
 
+        
         const giftNames = [
             "幫助人", "領導", "款待", "服事", "行政", "屬靈洞察力", "信心", "音樂", "神蹟", "手藝", "醫治",
             "奉獻", "憐憫", "智慧", "知識", "勸勉", "教導", "牧養", "使徒", "宣教", "作先知講道", "傳福音", "禱告"
