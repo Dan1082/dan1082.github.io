@@ -12,6 +12,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            font-size: 1.6em; /* 增加整體字體大小 */
         }
         .hidden { display: none; }
         .question-container, .result-container {
@@ -46,20 +47,20 @@
             align-items: center;
         }
         p, label {
-            font-size: 1.2em;
+            font-size: 1.6em; /* 增加一般文字和標籤的字體大小 */
         }
         input[type="text"] {
-            font-size: 1.2em;
+            font-size: 1.6em; /* 增加輸入框字體大小 */
             padding: 5px;
             margin: 10px 0;
             width: calc(100% - 22px);
         }
         button {
-            font-size: 1.2em;
+            font-size: 1.6em; /* 增加按鈕字體大小 */
             padding: 10px 20px;
         }
         .question {
-            font-size: 1.4em;
+            font-size: 1.8em; /* 增加問題部分的字體大小 */
             text-align: center;
         }
         .question.green { color: darkgreen; }
@@ -67,7 +68,7 @@
         .question.red { color: darkred; }
         .question.purple { color: darkpurple; }
         .option-container {
-            margin: 10px 0;
+            margin: 20px 0; /* 增加選項之間的間距 */
         }
         .option-container input[type="radio"] {
             margin: 0 10px 0 0;
@@ -77,13 +78,13 @@
                 width: 100%;
             }
             .question {
-                font-size: 1.2em;
+                font-size: 1.6em; /* 手機上稍微小一點 */
             }
             .option-container label {
-                font-size: 1.1em;
+                font-size: 1.4em; /* 手機上稍微小一點 */
             }
             .option-container {
-                margin: 15px 0;
+                margin: 20px 0;
             }
         }
     </style>
@@ -129,7 +130,7 @@
         <div class="bar-container" id="result-bars"></div>
     </div>
 
-    <script>
+    <script>        
         const questions = [
             "我喜歡在幕後處理細節瑣事。",
             "當群體中沒有領導者的時候，我常會自告奮勇去擔負領導的工作。",
@@ -203,7 +204,7 @@
             "我樂意幫助別人完成工作，並不需要公開的表彰。",
             "人們敬重我的意見並跟隨我的方向。",
             "我樂意開放自己的家與教會的新朋友或訪客交往。",
-            "我喜爱幫助有需要的人;當滿足他們的需要時 ，我感到滿足。",
+            "我喜愛幫助有需要的人;當滿足他們的需要時 ，我感到滿足。",
             "那怕在壓力下，我也可輕鬆地作出重要的決定。",
             "人們常來向我請教如何判斷屬靈上的真理與錯謬。",
             "我常透過禱告向神表達信心，神亦以令人振奮的方式回應我的禱告。",
@@ -305,28 +306,13 @@
             
             const resultBars = document.getElementById('result-bars');
             resultBars.innerHTML = '';
-
-            const results = scores.map((score, index) => ({ gift: giftNames[index], score, color: colors[index] }));
-            results.sort((a, b) => b.score - a.score);
-
-            results.forEach(result => {
-                if (result.score > 0) {
-                    const barContainer = document.createElement('div');
-                    const bar = document.createElement('div');
-                    bar.style.width = `${result.score * 10}px`;
-                    bar.style.backgroundColor = result.color;
-                    bar.className = 'bar';
-                    bar.textContent = result.score;
-
-                    const label = document.createElement('span');
-                    label.textContent = result.gift;
-                    label.style.marginLeft = "10px";
-
-                    barContainer.appendChild(bar);
-                    barContainer.appendChild(label);
-
-                    resultBars.appendChild(barContainer);
-                }
+            scores.forEach((score, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.width = `${score * 10}px`;
+                bar.style.backgroundColor = colors[index];
+                bar.textContent = `${giftNames[index]}: ${score}`;
+                resultBars.appendChild(bar);
             });
 
             document.getElementById('result').classList.remove('hidden');
