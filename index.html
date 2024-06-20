@@ -1,3 +1,8 @@
+        
+
+
+
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -12,7 +17,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 1.5em; /* 增加整體字體大小 */
+            font-size: 1.4em; /* 調整整體字體大小 */
         }
         .hidden { display: none; }
         .question-container, .result-container {
@@ -47,20 +52,20 @@
             align-items: center;
         }
         p, label {
-            font-size: 1.5em; /* 增加一般文字和標籤的字體大小 */
+            font-size: 1.4em; /* 調整一般文字和標籤的字體大小 */
         }
         input[type="text"] {
-            font-size: 1.5em; /* 增加輸入框字體大小 */
+            font-size: 1.4em; /* 調整輸入框字體大小 */
             padding: 5px;
             margin: 10px 0;
             width: calc(100% - 22px);
         }
         button {
-            font-size: 1.5em; /* 增加按鈕字體大小 */
+            font-size: 1.4em; /* 調整按鈕字體大小 */
             padding: 10px 20px;
         }
         .question {
-            font-size: 1.6em; /* 增加問題部分的字體大小 */
+            font-size: 1.6em; /* 調整問題部分的字體大小 */
             text-align: center;
         }
         .question.green { color: darkgreen; }
@@ -78,10 +83,10 @@
                 width: 100%;
             }
             .question {
-                font-size: 1.5em; /* 手機上稍微小一點 */
+                font-size: 1.4em; /* 手機上稍微小一點 */
             }
             .option-container label {
-                font-size: 1.3em; /* 手機上稍微小一點 */
+                font-size: 1.2em; /* 手機上稍微小一點 */
             }
             .option-container {
                 margin: 20px 0;
@@ -130,7 +135,7 @@
         <div class="bar-container" id="result-bars"></div>
     </div>
 
-    <script>        
+    <script>             
         const questions = [
             "我喜歡在幕後處理細節瑣事。",
             "當群體中沒有領導者的時候，我常會自告奮勇去擔負領導的工作。",
@@ -225,7 +230,7 @@
             "我強烈希望幫助非基督徒得著主耶穌的救恩。",
             "我最喜愛的教會事工是禱告，為此我把大量的時間握上。",
         ];
-        
+
         const giftNames = [
             "幫助人", "領導", "款待", "服事", "行政", "屬靈洞察力", "信心", "音樂", "神蹟", "手藝", "醫治",
             "奉獻", "憐憫", "智慧", "知識", "勸勉", "教導", "牧養", "使徒", "宣教", "作先知講道", "傳福音", "禱告"
@@ -306,12 +311,16 @@
             
             const resultBars = document.getElementById('result-bars');
             resultBars.innerHTML = '';
-            scores.forEach((score, index) => {
+
+            const resultData = scores.map((score, index) => ({ gift: giftNames[index], score, color: colors[index] }));
+            resultData.sort((a, b) => b.score - a.score); // 根據分數排序
+
+            resultData.forEach(item => {
                 const bar = document.createElement('div');
                 bar.className = 'bar';
-                bar.style.width = `${score * 10}px`;
-                bar.style.backgroundColor = colors[index];
-                bar.textContent = `${giftNames[index]}: ${score}`;
+                bar.style.width = `${item.score * 10}px`;
+                bar.style.backgroundColor = item.color;
+                bar.textContent = `${item.gift}: ${item.score}`;
                 resultBars.appendChild(bar);
             });
 
