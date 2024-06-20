@@ -66,12 +66,24 @@
         .question.blue { color: darkblue; }
         .question.red { color: darkred; }
         .question.purple { color: darkpurple; }
+        .option-container {
+            margin: 10px 0;
+        }
+        .option-container input[type="radio"] {
+            margin: 0 10px 0 0;
+        }
         @media (max-width: 600px) {
             .question-container, .result-container {
                 width: 100%;
             }
             .question {
                 font-size: 1.2em;
+            }
+            .option-container label {
+                font-size: 1.1em;
+            }
+            .option-container {
+                margin: 15px 0;
             }
         }
     </style>
@@ -87,23 +99,23 @@
     <div id="quiz" class="hidden">
         <div class="question-container">
             <p id="question" class="question"></p>
-            <div>
+            <div class="option-container">
                 <input type="radio" id="option0" name="options" value="0">
                 <label for="option0">否定</label>
             </div>
-            <div>
+            <div class="option-container">
                 <input type="radio" id="option1" name="options" value="1">
                 <label for="option1">少許贊同</label>
             </div>
-            <div>
+            <div class="option-container">
                 <input type="radio" id="option2" name="options" value="2">
                 <label for="option2">大致贊同</label>
             </div>
-            <div>
+            <div class="option-container">
                 <input type="radio" id="option3" name="options" value="3">
                 <label for="option3">相當贊同</label>
             </div>
-            <div>
+            <div class="option-container">
                 <input type="radio" id="option4" name="options" value="4">
                 <label for="option4">非常贊同</label>
             </div>
@@ -212,7 +224,6 @@
             "我強烈希望幫助非基督徒得著主耶穌的救恩。",
             "我最喜愛的教會事工是禱告，為此我把大量的時間握上。",
         ];
-
         
         const giftNames = [
             "幫助人", "領導", "款待", "服事", "行政", "屬靈洞察力", "信心", "音樂", "神蹟", "手藝", "醫治",
