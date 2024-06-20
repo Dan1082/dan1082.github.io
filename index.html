@@ -1,8 +1,3 @@
-        
-
-
-
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -50,6 +45,9 @@
             margin: 2px 0;
             display: flex;
             align-items: center;
+        }
+        .bar-label {
+            margin-left: 10px;
         }
         p, label {
             font-size: 1.4em; /* 調整一般文字和標籤的字體大小 */
@@ -135,7 +133,7 @@
         <div class="bar-container" id="result-bars"></div>
     </div>
 
-    <script>             
+    <script>        
         const questions = [
             "我喜歡在幕後處理細節瑣事。",
             "當群體中沒有領導者的時候，我常會自告奮勇去擔負領導的工作。",
@@ -316,12 +314,20 @@
             resultData.sort((a, b) => b.score - a.score); // 根據分數排序
 
             resultData.forEach(item => {
+                const barContainer = document.createElement('div');
                 const bar = document.createElement('div');
+                const barLabel = document.createElement('span');
+                
                 bar.className = 'bar';
                 bar.style.width = `${item.score * 10}px`;
                 bar.style.backgroundColor = item.color;
-                bar.textContent = `${item.gift}: ${item.score}`;
-                resultBars.appendChild(bar);
+
+                barLabel.className = 'bar-label';
+                barLabel.textContent = `${item.gift}: ${item.score}`;
+
+                barContainer.appendChild(bar);
+                barContainer.appendChild(barLabel);
+                resultBars.appendChild(barContainer);
             });
 
             document.getElementById('result').classList.remove('hidden');
